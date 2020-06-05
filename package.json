@@ -1,6 +1,6 @@
 {
   "name": "offline-browser-pub-sub",
-  "description": "pub-sub system using the browsers local storage to send messages between tabs offline",
+  "description": "Pub-sub system using the browsers local storage to send messages between tabs offline",
   "repository": "https://github.com/olerichter00/offline-browser-pub-sub.git",
   "homepage": "https://github.com/olerichter00/offline-browser-pub-sub.git",
   "keywords": [
@@ -12,7 +12,10 @@
     "localstorage"
   ],
   "author": "Ole Richter <ole.richter91@gmail.com>",
-  "version": "1.0.4",
+  "version": "1.0.9",
+  "files": [
+    "lib/*"
+  ],
   "main": "lib/browserPubSub.js",
   "license": "MIT",
   "scripts": {
