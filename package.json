@@ -1,0 +1,58 @@
+{
+  "name": "offline-browser-pub-sub",
+  "description": "pub-sub system using the browsers local storage to send messages between tabs offline",
+  "repository": "https://github.com/olerichter00/offline-browser-pub-sub.git",
+  "homepage": "https://github.com/olerichter00/offline-browser-pub-sub.git",
+  "keywords": [
+    "pub",
+    "sub",
+    "pubsub",
+    "browser",
+    "offline",
+    "localstorage"
+  ],
+  "author": "Ole Richter <ole.richter91@gmail.com>",
+  "version": "1.0.4",
+  "main": "lib/browserPubSub.js",
+  "license": "MIT",
+  "scripts": {
+    "serve": "webpack --config webpack.config-dev.js && serve example",
+    "dev": "npm-watch",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "build": "babel src --out-dir lib",
+    "prepare": "yarn test && yarn run build"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "watch": {
+    "serve": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,html"
+    }
+  },
+  "jest": {
+    "setupFiles": [
+      "./jest.setup.js"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
+    "npm-watch": "^0.6.0",
+    "serve": "^11.3.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "uuid": "^8.1.0"
+  }
+}

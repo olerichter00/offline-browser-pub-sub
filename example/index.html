@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>Browser Pub Sub</title>
+    <script src="./main.js"></script>
+  </head>
+
+  <body>
+    <button onclick="send(randomWord())">
+      Send
+    </button>
+    <button onclick="subscribe()">
+      Subscribe
+    </button>
+    <button onclick="unsubscribe()">
+      Unsubscribe
+    </button>
+    <div id="messages"></div>
+
+    <script>
+      window.onload = function () {
+        const TOPIC_NAME = 'my-topic'
+
+        let token
+
+        randomWord = () => {
+          const words = [
+            'Katze',
+            'Hund',
+            'Affe',
+            'Panda',
+            'Libelle',
+            'Schmetterling',
+          ]
+
+          return words[Math.floor(Math.random() * words.length)]
+        }
+
+        subscribe = () => {
+          if (token !== undefined) return
+
+          token = browserPubSub.subscribe(TOPIC_NAME, message => {
+            const element = document.createElement('p')
+            element.innerHTML = message
+            document.getElementById('messages').prepend(element)
+          })
+        }
+
+        unsubscribe = () => {
+          browserPubSub.unsubscribe(token)
+          token = undefined
+        }
+
+        send = text => browserPubSub.publish(TOPIC_NAME, text)
+
+        subscribe()
+      }
+    </script>
+  </body>
+</html>
