@@ -6,7 +6,16 @@ import NotifierService from './notifierService'
 const topicRegistry = new TopicRegistry()
 const notifierService = new NotifierService({ topicRegistry })
 
+const verifyTopicName = topicName => {
+  if (typeof topicName !== 'string')
+    throw Error('Topic musst be a string (${typeof topicName}).')
+}
+
 const subscribe = (topicName, callback) => {
+  verifyTopicName(topicName)
+
+  if (typeof topicName !== 'string') throw Error('Topic musst be a string.')
+
   const topic = topicRegistry.get(topicName)
 
   const subscriber = new Subscriber(callback)
@@ -24,10 +33,12 @@ const unsubscribe = id => {
   })
 }
 
-const publish = (topic, message, { notifySameTab = true } = {}) => {
+const publish = (topicName, message, { notifySameTab = true } = {}) => {
+  verifyTopicName(topicName)
+
   const event = new MessageEvent(message)
 
-  notifierService.publish(topic, JSON.stringify(event), notifySameTab)
+  notifierService.publish(topicName, JSON.stringify(event), notifySameTab)
 }
 
 export const browserPubSub = { subscribe, unsubscribe, publish }
