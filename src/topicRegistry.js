@@ -1,22 +1,35 @@
 import Topic from './entities/topic'
+import Subscriber from './entities/subscriber'
 
 class TopicRegistry {
   constructor() {
     this.topics = {}
   }
 
-  get(name) {
-    if (!this.exists(name)) this.topics[name] = new Topic(name)
+  register(topicName, callback) {
+    if (!this.topics[topicName]) this.topics[topicName] = new Topic(topicName)
 
-    return this.topics[name]
+    const topic = this.topics[topicName]
+
+    const subscriber = new Subscriber(callback)
+
+    topic.subscribers.push(subscriber)
+
+    return subscriber
   }
 
-  exists(name) {
-    return !!this.topics[name]
+  unregister(subscriberId) {
+    Object.values(this.topics).forEach(topic => {
+      topic.subscribers = topic.subscribers.filter(
+        subscriber => subscriber.id !== subscriberId,
+      )
+    })
   }
 
-  all() {
-    return Object.values(this.topics)
+  getSubscribersFor(topicName) {
+    if (!this.topics[topicName]) return []
+
+    return this.topics[topicName].subscribers
   }
 }
 

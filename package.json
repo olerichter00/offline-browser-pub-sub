@@ -16,13 +16,13 @@
   "files": [
     "lib/*"
   ],
-  "main": "lib/browserPubSub.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
     "serve": "webpack --config webpack.config-dev.js && serve example",
     "dev": "npm-watch",
     "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test:watch": "jest --watch",
     "build": "babel src --out-dir lib",
     "prepare": "yarn test && yarn run build"
   },

@@ -1,45 +1,33 @@
-import TopicRegistry from './topicRegistry'
-import Subscriber from './entities/subscriber'
 import MessageEvent from './entities/messageEvent'
-import NotifierService from './notifierService'
 
-const topicRegistry = new TopicRegistry()
-const notifierService = new NotifierService({ topicRegistry })
+class BrowserPubSub {
+  constructor({ topicRegistry, notifierService }) {
+    this.topicRegistry = topicRegistry
+    this.notifierService = notifierService
+  }
 
-const verifyTopicName = topicName => {
-  if (typeof topicName !== 'string')
-    throw Error('Topic musst be a string (${typeof topicName}).')
+  verifyTopicName(topicName) {
+    if (typeof topicName !== 'string')
+      throw Error('Topic musst be a string (${typeof topicName}).')
+  }
+
+  subscribe(topicName, callback) {
+    this.verifyTopicName(topicName)
+
+    const subscriber = this.topicRegistry.register(topicName, callback)
+
+    return subscriber.id
+  }
+
+  unsubscribe(subscriberId) {
+    this.topicRegistry.unregister(subscriberId)
+  }
+
+  publish(topicName, message, { notifySameTab = true } = {}) {
+    this.verifyTopicName(topicName)
+
+    this.notifierService.publish(topicName, message, notifySameTab)
+  }
 }
 
-const subscribe = (topicName, callback) => {
-  verifyTopicName(topicName)
-
-  if (typeof topicName !== 'string') throw Error('Topic musst be a string.')
-
-  const topic = topicRegistry.get(topicName)
-
-  const subscriber = new Subscriber(callback)
-
-  topic.subscribers.push(subscriber)
-
-  return subscriber.id
-}
-
-const unsubscribe = id => {
-  topicRegistry.all().forEach(topic => {
-    topic.subscribers = topic.subscribers.filter(
-      subscriber => subscriber.id !== id,
-    )
-  })
-}
-
-const publish = (topicName, message, { notifySameTab = true } = {}) => {
-  verifyTopicName(topicName)
-
-  const event = new MessageEvent(message)
-
-  notifierService.publish(topicName, JSON.stringify(event), notifySameTab)
-}
-
-export const browserPubSub = { subscribe, unsubscribe, publish }
-export default browserPubSub
+export default BrowserPubSub

@@ -1,3 +1,5 @@
+import MessageEvent from './entities/messageEvent'
+
 class NotifierService {
   constructor({ topicRegistry }) {
     this.topicRegistry = topicRegistry
@@ -5,12 +7,10 @@ class NotifierService {
     window.addEventListener(
       'storage',
       e => {
-        if (!this.topicRegistry.exists(e.key)) return
-
-        const topic = this.topicRegistry.get(e.key)
+        const subscribers = this.topicRegistry.getSubscribersFor(e.key)
         const event = JSON.parse(e.newValue)
 
-        topic.subscribers.forEach(subscriber => {
+        subscribers.forEach(subscriber => {
           subscriber.call(event.message)
         })
       },
@@ -19,10 +19,12 @@ class NotifierService {
   }
 
   publish(topic, message, notifySameTab) {
+    const event = new MessageEvent(message)
+
     // fire storage event in other windows
-    this.setStorageItem(topic, message)
+    this.setStorageItem(topic, JSON.stringify(event))
     // fire storage event in the same windows
-    if (notifySameTab) this.fireStorageEvent(topic, message)
+    if (notifySameTab) this.fireStorageEvent(topic, JSON.stringify(event))
   }
 
   setStorageItem(topic, message) {
