@@ -37,7 +37,11 @@ browserPubSub.publish('my-topic', 'my-message')
 // Publish without notifying the same tab
 browserPubSub.publish(
   'my-topic',
-  { text: 'my-complex-message' },
+  {
+    text: 'my-complex-message',
+    from: 'me',
+    to: 'a friend',
+  },
   { notifySameTab: false },
 )
 
